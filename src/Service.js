@@ -1,12 +1,13 @@
+const Parser = require('rss-parser');
+
 async function getFeed(feedUrl) {
-  let Parser = require("rss-parser");
-  let parser = new Parser({
+  const parser = new Parser({
     customFields: {
-      item: [["enclosure", { keepArray: true }]]
+      item: [['enclosure', { keepArray: true }]]
     }
   });
 
-  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+  const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
   if (feedUrl) {
     try {
@@ -16,10 +17,12 @@ async function getFeed(feedUrl) {
       return null;
     }
   } else {
-    return;
+
   }
+
+  return null;
 }
 
 export default {
-  getFeed
-}
+  getFeed,
+};

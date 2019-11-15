@@ -3,6 +3,7 @@ import {
   AppBar,
   Toolbar,
   CssBaseline,
+  CircularProgress,
 } from '@material-ui/core';
 
 import styles from './App.module.css';
@@ -12,7 +13,7 @@ import styles from './App.module.css';
 import Service from '../../Service';
 import Sidebar from '../Sidebar/Sidebar';
 import AddSourceDialog from '../AddSourceDialog/AddSourceDialog';
-import SourcesView from '../SourcesView/SourcesView';
+import SourceView from '../SourceView/SourceView';
 
 let sourceId = 0;
 
@@ -21,19 +22,63 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      sources: [],
-      selectedSourceId: null,
+      sources: [
+        {
+          id: 0,
+          title: 'tut by',
+          url: 'https://news.tut.by/rss/index.rss',
+        },
+        {
+          id: 1,
+          title: 'nasa',
+          url: 'https://www.nasa.gov/rss/dyn/breaking_news.rss',
+        },
+        {
+          id: 2,
+          title: 'Yandex auto',
+          url: 'https://news.yandex.ru/auto.rss',
+        },
+      ],
+      selectedSourceId: 1,
       isAddDialog: false,
       loading: false,
       sourceAddError: null,
+      rssItems: null,
     };
 
+    this.setSource = this.setSource.bind(this);
     this.toggleSourceAddDialog = this.toggleSourceAddDialog.bind(this);
     this.handleSourceAdd = this.handleSourceAdd.bind(this);
   }
 
-  setSource(source) {
-    this.setState({ selectedSourceId: source.id });
+  async componentDidMount() {
+    this.setNews();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { selectedSourceId } = this.state;
+
+    if (selectedSourceId !== prevState.selectedSourceId) {
+      this.setNews();
+    }
+  }
+
+  async setNews() {
+    const { selectedSourceId, sources } = this.state;
+
+    if (selectedSourceId === null) return;
+
+    const currentSource = sources.find((source) => source.id === selectedSourceId);
+
+    this.setState({ loading: true, selectedSourceId: currentSource.id }, async () => {
+      const rss = await Service.getFeed(currentSource.url);
+
+      this.setState({ rssItems: rss.items || [], loading: false });
+    });
+  }
+
+  setSource(sourceId) {
+    this.setState({ selectedSourceId: sourceId });
   }
 
   toggleSourceAddDialog() {
@@ -79,7 +124,7 @@ class App extends React.Component {
 
   render() {
     const {
-      sources, isAddDialog, sourceAddError, loading, selectedSourceId,
+      sources, isAddDialog, sourceAddError, loading, selectedSourceId, rssItems,
     } = this.state;
 
     return (
@@ -90,7 +135,7 @@ class App extends React.Component {
             <Sidebar
               sources={sources}
               toggleDialog={this.toggleSourceAddDialog}
-              onSourceClick={this.setSource.bind(this)}
+              onSourceClick={this.setSource}
               selectedSourceId={selectedSourceId}
             />
           </nav>
@@ -101,15 +146,18 @@ class App extends React.Component {
             error={sourceAddError}
             loading={loading}
           />
-          <main>
-            <SourcesView />
+          <main className={styles.main}>
+            {loading && (
+              <div className={styles.progress}><CircularProgress size={80} /></div>
+            )}
+            <div className={loading ? styles.progressBlock : ''}><SourceView rssItems={rssItems} /></div>
           </main>
         </div>
         {/* <AppBar position="fixed">
           <Toolbar>
           </Toolbar>
         </AppBar> */}
-        {/* {!selectedSourceId && <SourcesView />} */}
+        {/* {!selectedSourceId && <SourceView />} */}
       </>
 
       // <div className='App'>

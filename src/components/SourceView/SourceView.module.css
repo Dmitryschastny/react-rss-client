@@ -1,0 +1,41 @@
+.gridItem {
+  width: 25%;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 2rem;
+}
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardButton {
+  visibility: hidden;
+}
+
+.card:hover .cardButton {
+  visibility: visible;
+}
+
+@media(max-width: 1440px) {
+  .gridItem {
+    width: 33%;
+  }
+}
+
+@media(max-width: 1280px) {
+  .gridItem {
+    width: 50%;
+  }
+}
+
+@media(max-width: 768px) {
+  .gridItem {
+    width: 100%;
+  }
+}

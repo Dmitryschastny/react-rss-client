@@ -12,7 +12,7 @@ import {
 
 import styles from './Sidebar.module.css';
 
-export default function Sidebar({ sources, toggleDialog, selectedSourceId }) {
+export default function Sidebar({ sources, toggleDialog, selectedSourceId, onSourceClick }) {
   return (
     <Drawer
       anchor="left"
@@ -25,11 +25,11 @@ export default function Sidebar({ sources, toggleDialog, selectedSourceId }) {
         <ListItem divider>
           <ListItemText primary="Your subscriptions" />
         </ListItem>
-        <ListItem button selected={!selectedSourceId}>
+        <ListItem button selected={selectedSourceId === null} onClick={() => onSourceClick(null)}>
           <ListItemText primary="Show all" />
         </ListItem>
         {sources.map((item) => (
-          <ListItem button key={item.id} selected={selectedSourceId === item.id}>
+          <ListItem button key={item.id} selected={selectedSourceId === item.id} onClick={() => onSourceClick(item.id)}>
             <ListItemText primary={item.title} />
           </ListItem>
         ))}
