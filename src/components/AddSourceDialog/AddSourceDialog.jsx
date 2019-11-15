@@ -6,51 +6,65 @@ import {
   DialogActions,
   Button,
   TextField,
-  LinearProgress
+  LinearProgress,
 } from '@material-ui/core';
 
 export default class AddSourceDialog extends React.Component {
   constructor(props) {
     super(props);
-    
-    this.inputRef = React.createRef()
+
+    this.urlInputRef = React.createRef();
+    this.titleInputRef = React.createRef();
   }
 
   render() {
-    const { isAddDialog, toggleDialog, onSourceAdd, error, loading } = this.props;
+    const {
+      isAddDialog, toggleDialog, onSourceAdd, errors, loading
+    } = this.props;
 
     return (
-      <Dialog open={isAddDialog}
+      <Dialog
+        open={isAddDialog}
         onClose={toggleDialog}
-        fullWidth={true}
+        fullWidth
       >
         {loading && (<LinearProgress />)}
         <DialogTitle>Add new rss source</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            margin='dense'
-            id='name'
-            label='Rss link'
-            type='email'
+            margin="dense"
+            label="Title"
             fullWidth
-            inputRef={this.inputRef}
-            error={!!error}
-            helperText={error}
+            inputRef={this.titleInputRef}
+            error={!!errors.title}
+            helperText={errors.title}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Rss link"
+            fullWidth
+            inputRef={this.urlInputRef}
+            error={!!errors.url}
+            helperText={errors.url}
           />
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => onSourceAdd(this.inputRef.current ? this.inputRef.current.value : null)}
-            color='primary'
+            onClick={() => onSourceAdd(
+              this.titleInputRef.current ? this.titleInputRef.current.value : null,
+              this.urlInputRef.current ? this.urlInputRef.current.value : null,
+            )}
+            color="primary"
           >
             Add
           </Button>
-          <Button onClick={toggleDialog} color='primary'>
+          <Button onClick={toggleDialog} color="primary">
             Cancel
           </Button>
         </DialogActions>
-      </Dialog >
-    )
+      </Dialog>
+    );
   }
 }

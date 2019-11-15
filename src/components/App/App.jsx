@@ -16,7 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import AddSourceDialog from '../AddSourceDialog/AddSourceDialog';
 import SourceView from '../SourceView/SourceView';
 
-let sourceId = 0;
+let sourceId = 3;
 
 class App extends React.Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class App extends React.Component {
       selectedSourceId: 1,
       isAddDialog: false,
       loading: false,
-      sourceAddError: null,
+      sourceAddErrors: {},
       rssItems: null,
     };
 
@@ -84,26 +84,30 @@ class App extends React.Component {
     this.setState({ selectedSourceId: sourceId });
   }
 
-  async handleSourceAdd(url) {
+  async handleSourceAdd(title, url) {
     const { sources } = this.state;
+    const errors = {};
+    const isAlreadyExists = sources.find((source) => source.url === url);
 
     this.setState({ loading: true });
 
-    const isAlreadyExists = sources.find((source) => source.url === url);
-
-    if (isAlreadyExists) {
-      this.setState({
-        sourceAddError: 'Rss with this source has already been added.',
-        loading: false,
-      });
-      return;
+    if (!title) {
+      errors.title = 'Please provide a title for the rss!';
     }
 
-    if (await Service.getFeed(url)) {
+    if (isAlreadyExists) {
+      errors.url = 'Rss with this source has already been added.';
+    }
+
+    if (!(await Service.getFeed(url))) {
+      errors.url = 'Error occured while parsing RSS, try a new one.';
+    }
+
+    if (!Object.getOwnPropertyNames(errors).length) {
       this.setState({
         sources: [...sources, {
           id: sourceId,
-          title: 'test',
+          title,
           url,
         }],
         isAddDialog: false,
@@ -116,21 +120,21 @@ class App extends React.Component {
     }
 
     this.setState({
-      sourceAddError: 'Error occured while parsing RSS, try a new one.',
+      sourceAddErrors: errors,
       loading: false,
     });
   }
 
-
   toggleSourceAddDialog() {
-    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddError: null }));
+    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddErrors: {} }));
   }
 
   render() {
     const {
-      sources, isAddDialog, sourceAddError, loading, selectedSourceId, rssItems,
+      sources, isAddDialog, sourceAddErrors, loading, selectedSourceId, rssItems,
     } = this.state;
 
+    const currentSource = sources.find((source) => source.id === selectedSourceId);
     return (
       <>
         <CssBaseline />
@@ -147,7 +151,7 @@ class App extends React.Component {
             isAddDialog={isAddDialog}
             onSourceAdd={this.handleSourceAdd}
             toggleDialog={this.toggleSourceAddDialog}
-            error={sourceAddError}
+            errors={sourceAddErrors}
             loading={loading}
           />
           <main className={styles.main}>
@@ -157,7 +161,7 @@ class App extends React.Component {
             <div className={loading ? styles.progressBlock : ''}>
               <div className={styles.contentContainer}>
                 <Typography variant="h1" component="h2" gutterBottom>
-                  Nasa
+                  {currentSource.title}
                 </Typography>
                 <SourceView
                   rssItems={rssItems}
