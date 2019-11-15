@@ -25,3 +25,8 @@
 .progressBlock {
   opacity: 0.5;
 }
+
+.contentContainer {
+  background-color: #ffffff;
+  padding: 2rem;
+}

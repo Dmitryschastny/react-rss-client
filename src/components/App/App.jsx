@@ -4,6 +4,7 @@ import {
   Toolbar,
   CssBaseline,
   CircularProgress,
+  Typography,
 } from '@material-ui/core';
 
 import styles from './App.module.css';
@@ -73,16 +74,14 @@ class App extends React.Component {
     this.setState({ loading: true, selectedSourceId: currentSource.id }, async () => {
       const rss = await Service.getFeed(currentSource.url);
 
+      rss.items = rss.items.map((item, index) => ({ ...item, id: index }));
+
       this.setState({ rssItems: rss.items || [], loading: false });
     });
   }
 
   setSource(sourceId) {
     this.setState({ selectedSourceId: sourceId });
-  }
-
-  toggleSourceAddDialog() {
-    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddError: null }));
   }
 
   async handleSourceAdd(url) {
@@ -122,6 +121,11 @@ class App extends React.Component {
     });
   }
 
+
+  toggleSourceAddDialog() {
+    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddError: null }));
+  }
+
   render() {
     const {
       sources, isAddDialog, sourceAddError, loading, selectedSourceId, rssItems,
@@ -150,40 +154,20 @@ class App extends React.Component {
             {loading && (
               <div className={styles.progress}><CircularProgress size={80} /></div>
             )}
-            <div className={loading ? styles.progressBlock : ''}><SourceView rssItems={rssItems} /></div>
+            <div className={loading ? styles.progressBlock : ''}>
+              <div className={styles.contentContainer}>
+                <Typography variant="h1" component="h2" gutterBottom>
+                  Nasa
+                </Typography>
+                <SourceView
+                  rssItems={rssItems}
+                  onCardClick={this.setArticleId}
+                />
+              </div>
+            </div>
           </main>
         </div>
-        {/* <AppBar position="fixed">
-          <Toolbar>
-          </Toolbar>
-        </AppBar> */}
-        {/* {!selectedSourceId && <SourceView />} */}
       </>
-
-      // <div className='App'>
-      //   <header className='App-header'>
-      //     <h1 className='App-title'>quick-feed</h1>
-      //   </header>
-      //   <UserForm
-      //     getFeed={this.getFeed}
-      //     onClick={() => this.setState({ loading: true })}
-      //   />
-      //   {this.state.error ? this.renderAlert() : <div />}
-      //   {!this.state.loading ? (
-      //     <p>Please enter an RSS feed</p>
-      //   ) : (
-      //     <div>
-      //       <img src={logo} className='App-logo' alt='App Logo' />
-      //     </div>
-      //   )}
-      //   <EpisodeList
-      //     episodes={this.state.episodes}
-      //     program_title={this.state.program_title}
-      //     program_description={this.state.program_description}
-      //     program_image={this.state.program_image}
-      //     loading={this.props.loading}
-      //   />
-      // </div>
     );
   }
 }
