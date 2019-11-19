@@ -67,17 +67,48 @@ class App extends React.Component {
   async setNews() {
     const { selectedSourceId, sources } = this.state;
 
-    if (selectedSourceId === null) return;
+    if (selectedSourceId !== null) {
+      const currentSource = sources.find((source) => source.id === selectedSourceId);
 
-    const currentSource = sources.find((source) => source.id === selectedSourceId);
+      this.setState({ loading: true }, async () => {
+        const rss = await Service.getFeed(currentSource.url);
 
-    this.setState({ loading: true, selectedSourceId: currentSource.id }, async () => {
-      const rss = await Service.getFeed(currentSource.url);
+        this.setState({
+          rssItems: rss.items || [],
+          loading: false,
+          selectedSourceId: currentSource.id,
+        });
+      });
+    } else {
+      const results = [];
 
-      rss.items = rss.items.map((item, index) => ({ ...item, id: index }));
+      for (let i = 0; i < sources.length; i += 1) {
+        results.push(Service.getFeed(sources[i].url));
+      }
 
-      this.setState({ rssItems: rss.items || [], loading: false });
-    });
+      this.setState({ loading: true }, async () => {
+        const rsses = await Promise.all(results);
+
+        const rssesItems = rsses.reduce((prev, rss) => [...prev, ...rss.items], []);
+
+        rssesItems.sort((a, b) => {
+          if (new Date(a.isoDate) < new Date(b.isoDate)) {
+            return 1;
+          }
+
+          if (new Date(a.isoDate) > new Date(b.isoDate)) {
+            return -1;
+          }
+
+          return 0;
+        });
+
+        this.setState({
+          rssItems: rssesItems,
+          loading: false,
+        });
+      });
+    }
   }
 
   setSource(sourceId) {
@@ -161,7 +192,7 @@ class App extends React.Component {
             <div className={loading ? styles.progressBlock : ''}>
               <div className={styles.contentContainer}>
                 <Typography variant="h1" component="h2" gutterBottom>
-                  {currentSource.title}
+                  {currentSource ? currentSource.title : 'Rss from all sources'}
                 </Typography>
                 <SourceView
                   rssItems={rssItems}

@@ -14,8 +14,8 @@ export default function SourceView({ rssItems }) {
 
   return (
     <Grid container spacing={4}>
-      {rssItems.map((item) => (
-        <Grid key={item.id} item className={styles.gridItem}>
+      {rssItems.map((item, index) => (
+        <Grid key={index} item className={styles.gridItem}>
           <Card className={styles.card}>
             <CardActionArea className={styles.activeArea} onClick={() => window.open(item.link, '_blank')}>
               <CardContent>
