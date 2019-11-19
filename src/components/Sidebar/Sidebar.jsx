@@ -5,14 +5,22 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListItemSecondaryAction,
 } from '@material-ui/core';
 import {
   Add as AddIcon,
+  Close as DeleteIcon,
 } from '@material-ui/icons';
 
 import styles from './Sidebar.module.css';
 
-export default function Sidebar({ sources, toggleDialog, selectedSourceId, onSourceClick }) {
+export default function Sidebar({
+  sources,
+  toggleAddDialog,
+  toggleDeleteDialog,
+  selectedSourceId,
+  onSourceClick,
+}) {
   return (
     <Drawer
       anchor="left"
@@ -29,11 +37,22 @@ export default function Sidebar({ sources, toggleDialog, selectedSourceId, onSou
           <ListItemText primary="Show all" />
         </ListItem>
         {sources.map((item) => (
-          <ListItem button key={item.id} selected={selectedSourceId === item.id} onClick={() => onSourceClick(item.id)}>
+          <ListItem
+            button
+            key={item.id}
+            selected={selectedSourceId === item.id}
+            onClick={() => onSourceClick(item.id)}
+            classes={{
+              container: styles.listItem,
+            }}
+          >
             <ListItemText primary={item.title} />
+            <ListItemSecondaryAction onClick={() => toggleDeleteDialog(item.id)}>
+              <DeleteIcon className={styles.deleteIcon} />
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
-        <ListItem button onClick={toggleDialog}>
+        <ListItem button onClick={toggleAddDialog}>
           <ListItemIcon><AddIcon /></ListItemIcon>
           <ListItemText primary="Add" />
         </ListItem>

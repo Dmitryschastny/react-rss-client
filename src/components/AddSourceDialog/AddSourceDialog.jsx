@@ -24,7 +24,7 @@ export default class AddSourceDialog extends React.Component {
     return (
       <Dialog
         open={isAddDialog}
-        onClose={toggleDialog}
+        onClose={() => toggleDialog()}
         fullWidth
       >
         {loading && (<LinearProgress />)}
@@ -47,7 +47,7 @@ export default class AddSourceDialog extends React.Component {
           >
             Add
           </Button>
-          <Button onClick={toggleDialog} color="primary">
+          <Button onClick={() => toggleDialog()} color="primary">
             Cancel
           </Button>
         </DialogActions>

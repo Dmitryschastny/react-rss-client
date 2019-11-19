@@ -12,7 +12,9 @@ import styles from './App.module.css';
 import Service from '../../Service';
 import Sidebar from '../Sidebar/Sidebar';
 import AddSourceDialog from '../AddSourceDialog/AddSourceDialog';
+import DeleteSourceDialog from '../DeleteSourceDialog/DeleteSourceDialog';
 import SourceView from '../SourceView/SourceView';
+import { Delete } from '@material-ui/icons';
 
 let sourceId = 3;
 
@@ -38,8 +40,10 @@ class App extends React.Component {
           url: 'https://news.yandex.ru/auto.rss',
         },
       ],
-      selectedSourceId: 1,
       isAddDialog: false,
+      isDeleteDialog: false,
+      deleteSourceId: null,
+      selectedSourceId: 1,
       loading: false,
       sourceAddErrors: {},
       rssItems: null,
@@ -47,7 +51,9 @@ class App extends React.Component {
 
     this.setSource = this.setSource.bind(this);
     this.toggleSourceAddDialog = this.toggleSourceAddDialog.bind(this);
+    this.toggleSourceDeleteDialog = this.toggleSourceDeleteDialog.bind(this);
     this.handleSourceAdd = this.handleSourceAdd.bind(this);
+    this.handleSourceDelete = this.handleSourceDelete.bind(this);
   }
 
   async componentDidMount() {
@@ -152,16 +158,39 @@ class App extends React.Component {
     });
   }
 
+  handleSourceDelete() {
+    this.setState((prevState) => ({
+      sources: prevState.sources.filter((source) => source.id !== prevState.deleteSourceId),
+      isDeleteDialog: false,
+      selectedSourceId: null,
+    }));
+  }
+
   toggleSourceAddDialog() {
     this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddErrors: {} }));
   }
 
+  toggleSourceDeleteDialog(id) {
+    this.setState((prevState) => {
+      const newState = { isDeleteDialog: !prevState.isDeleteDialog };
+
+      if (id !== undefined) {
+        newState.deleteSourceId = id;
+      }
+
+      return newState;
+    });
+  }
+
   render() {
     const {
-      sources, isAddDialog, sourceAddErrors, loading, selectedSourceId, rssItems,
+      sources, isAddDialog, sourceAddErrors, loading, selectedSourceId, rssItems, isDeleteDialog,
+      deleteSourceId,
     } = this.state;
 
     const currentSource = sources.find((source) => source.id === selectedSourceId);
+    const deleteSource = sources.find((source) => source.id === deleteSourceId);
+
     return (
       <>
         <CssBaseline />
@@ -169,7 +198,8 @@ class App extends React.Component {
           <nav className={styles.nav}>
             <Sidebar
               sources={sources}
-              toggleDialog={this.toggleSourceAddDialog}
+              toggleAddDialog={this.toggleSourceAddDialog}
+              toggleDeleteDialog={this.toggleSourceDeleteDialog}
               onSourceClick={this.setSource}
               selectedSourceId={selectedSourceId}
             />
@@ -180,6 +210,13 @@ class App extends React.Component {
             toggleDialog={this.toggleSourceAddDialog}
             errors={sourceAddErrors}
             loading={loading}
+          />
+          <DeleteSourceDialog
+            isDeleteDialog={isDeleteDialog}
+            onSourceDelete={this.handleSourceDelete}
+            toggleDialog={this.toggleSourceDeleteDialog}
+            loading={loading}
+            rssTitle={deleteSource ? deleteSource.title : ''}
           />
           <main className={styles.main}>
             {loading && (
