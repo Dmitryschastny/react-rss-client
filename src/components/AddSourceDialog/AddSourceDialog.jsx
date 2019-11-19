@@ -14,7 +14,6 @@ export default class AddSourceDialog extends React.Component {
     super(props);
 
     this.urlInputRef = React.createRef();
-    this.titleInputRef = React.createRef();
   }
 
   render() {
@@ -34,15 +33,6 @@ export default class AddSourceDialog extends React.Component {
           <TextField
             autoFocus
             margin="dense"
-            label="Title"
-            fullWidth
-            inputRef={this.titleInputRef}
-            error={!!errors.title}
-            helperText={errors.title}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
             label="Rss link"
             fullWidth
             inputRef={this.urlInputRef}
@@ -52,10 +42,7 @@ export default class AddSourceDialog extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => onSourceAdd(
-              this.titleInputRef.current ? this.titleInputRef.current.value : null,
-              this.urlInputRef.current ? this.urlInputRef.current.value : null,
-            )}
+            onClick={() => onSourceAdd(this.urlInputRef.current ? this.urlInputRef.current.value : null)}
             color="primary"
           >
             Add

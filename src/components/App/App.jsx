@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  AppBar,
-  Toolbar,
   CssBaseline,
   CircularProgress,
   Typography,
@@ -111,26 +109,24 @@ class App extends React.Component {
     }
   }
 
-  setSource(sourceId) {
-    this.setState({ selectedSourceId: sourceId });
+  setSource(id) {
+    this.setState({ selectedSourceId: id });
   }
 
-  async handleSourceAdd(title, url) {
+  async handleSourceAdd(url) {
     const { sources } = this.state;
     const errors = {};
     const isAlreadyExists = sources.find((source) => source.url === url);
 
     this.setState({ loading: true });
 
-    if (!title) {
-      errors.title = 'Please provide a title for the rss!';
-    }
-
     if (isAlreadyExists) {
       errors.url = 'Rss with this source has already been added.';
     }
 
-    if (!(await Service.getFeed(url))) {
+    const rss = await Service.getFeed(url);
+
+    if (!rss) {
       errors.url = 'Error occured while parsing RSS, try a new one.';
     }
 
@@ -138,7 +134,7 @@ class App extends React.Component {
       this.setState({
         sources: [...sources, {
           id: sourceId,
-          title,
+          title: rss.title,
           url,
         }],
         isAddDialog: false,
