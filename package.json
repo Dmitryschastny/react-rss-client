@@ -10,8 +10,10 @@
     "axios": "^0.18.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "^3.2.0",
-    "rss-parser": "^3.7.3"
+    "rss-parser": "^3.7.3",
+    "serve": "^11.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
