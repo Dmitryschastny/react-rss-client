@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: baseline;
+  padding: 1rem;
+}
+
+.form .submitButton {
+  margin-bottom: 1rem;
+}
+
+.form .formItem {
+  margin-top: 1rem;
+}
