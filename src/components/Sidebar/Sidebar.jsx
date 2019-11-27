@@ -6,10 +6,13 @@ import {
   ListItemText,
   ListItemIcon,
   ListItemSecondaryAction,
+  IconButton,
+  Divider,
 } from '@material-ui/core';
 import {
   Add as AddIcon,
   Close as DeleteIcon,
+  ChevronLeft as ChevronLeftIcon,
 } from '@material-ui/icons';
 
 import styles from './Sidebar.module.css';
@@ -20,6 +23,7 @@ export default function Sidebar({
   toggleDeleteDialog,
   selectedSourceId,
   onSourceClick,
+  toggleDrawer,
 }) {
   return (
     <Drawer
@@ -29,6 +33,12 @@ export default function Sidebar({
         paper: styles.drawer,
       }}
     >
+      <div className={`${styles.header} ${styles.materialToolbar}`}>
+        <IconButton onClick={toggleDrawer}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </div>
+      <Divider />
       <List>
         <ListItem divider>
           <ListItemText primary="Your subscriptions" />

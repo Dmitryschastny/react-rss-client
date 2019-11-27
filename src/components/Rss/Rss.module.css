@@ -45,8 +45,9 @@
   padding: 2rem;
 }
 
-.appBarShift {
-  margin-left: 240px;
+.appBar.appBarShift {
+  left: 240px;
+  width: calc(100% - 240px);
 }
 
 .appBar {
@@ -55,4 +56,8 @@
 
 .appBar .hidden {
   display: none;
+}
+
+.appBar .toolbarText {
+  margin-right: 0.5rem;
 }

@@ -7,7 +7,7 @@ import {
   Toolbar,
   IconButton,
 } from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons';
+import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/icons';
 
 import styles from './Rss.module.css';
 import Service from '../../Service';
@@ -211,6 +211,19 @@ export default class Rss extends React.Component {
               className={isDrawerOpen ? styles.hidden : ''}
             >
               <MenuIcon />
+            </IconButton>
+            <div className="grow" />
+            <Typography variant="body1" className={styles.toolbarText}>
+              Guest
+            </Typography>
+            <IconButton
+              color="inherit"
+              // aria-label="open drawer"
+              // onClick={this.handleToggleDrawer}
+              // className={isDrawerOpen ? styles.hidden : ''}
+              edge="end"
+            >
+              <PersonSharpIcon />
             </IconButton>
           </Toolbar>
         </AppBar>

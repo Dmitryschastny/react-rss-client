@@ -18,3 +18,24 @@
   visibility: visible;
 } */
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.materialToolbar {
+  min-height: 56px;
+}
+
+@media (min-width:0px) and (orientation: landscape) {
+  .materialToolbar {
+    min-height: 48px;
+  }
+}
+
+@media (min-width:600px) {
+  .materialToolbar {
+    min-height: 64px;
+  }
+}

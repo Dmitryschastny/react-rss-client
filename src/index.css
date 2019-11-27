@@ -21,3 +21,19 @@ code {
 #root {
   height: 100%;
 }
+
+.flexEnd {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flexBetween {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.grow {
+  flex-grow: 1;
+}
