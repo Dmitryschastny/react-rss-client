@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   CssBaseline,
-  CircularProgress,
   Typography,
   AppBar,
   Toolbar,
@@ -45,7 +44,7 @@ export default class Rss extends React.Component {
       isDeleteDialog: false,
       deleteSourceId: null,
       selectedSourceId: 1,
-      loading: false,
+      isLoading: false,
       sourceAddErrors: {},
       rssItems: null,
       isDrawerOpen: true,
@@ -77,12 +76,12 @@ export default class Rss extends React.Component {
     if (selectedSourceId !== null) {
       const currentSource = sources.find((source) => source.id === selectedSourceId);
 
-      this.setState({ loading: true }, async () => {
+      this.setState({ isLoading: true }, async () => {
         const rss = await Service.getFeed(currentSource.url);
 
         this.setState({
           rssItems: rss.items || [],
-          loading: false,
+          isLoading: false,
           selectedSourceId: currentSource.id,
         });
       });
@@ -93,7 +92,7 @@ export default class Rss extends React.Component {
         results.push(Service.getFeed(sources[i].url));
       }
 
-      this.setState({ loading: true }, async () => {
+      this.setState({ isLoading: true }, async () => {
         const rsses = await Promise.all(results);
 
         const rssesItems = rsses.reduce((prev, rss) => [...prev, ...rss.items], []);
@@ -112,7 +111,7 @@ export default class Rss extends React.Component {
 
         this.setState({
           rssItems: rssesItems,
-          loading: false,
+          isLoading: false,
         });
       });
     }
@@ -127,7 +126,7 @@ export default class Rss extends React.Component {
     const errors = {};
     const isAlreadyExists = sources.find((source) => source.url === url);
 
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
 
     if (isAlreadyExists) {
       errors.url = 'Rss with this source has already been added.';
@@ -147,7 +146,7 @@ export default class Rss extends React.Component {
           url,
         }],
         isAddDialog: false,
-        loading: false,
+        isLoading: false,
       });
 
       sourceId += 1;
@@ -157,7 +156,7 @@ export default class Rss extends React.Component {
 
     this.setState({
       sourceAddErrors: errors,
-      loading: false,
+      isLoading: false,
     });
   }
 
@@ -191,7 +190,7 @@ export default class Rss extends React.Component {
 
   render() {
     const {
-      sources, isAddDialog, sourceAddErrors, loading, selectedSourceId, rssItems, isDeleteDialog,
+      sources, isAddDialog, sourceAddErrors, isLoading, selectedSourceId, rssItems, isDeleteDialog,
       deleteSourceId, isDrawerOpen,
     } = this.state;
 
@@ -201,7 +200,7 @@ export default class Rss extends React.Component {
     return (
       <>
         <CssBaseline />
-        <AppBar position="fixed" className={`${isDrawerOpen ? styles.appBarShift : ''} ${styles.appBar}`}>
+        <AppBar position="fixed" className={`${isDrawerOpen ? `${styles.appBarShift} containerSidebarOffest` : ''} ${styles.appBar}`}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -243,30 +242,21 @@ export default class Rss extends React.Component {
             onSourceAdd={this.handleSourceAdd}
             toggleDialog={this.toggleSourceAddDialog}
             errors={sourceAddErrors}
-            loading={loading}
+            isLoading={isLoading}
           />
           <DeleteSourceDialog
             isDeleteDialog={isDeleteDialog}
             onSourceDelete={this.handleSourceDelete}
             toggleDialog={this.toggleSourceDeleteDialog}
-            loading={loading}
+            isLoading={isLoading}
             rssTitle={deleteSource ? deleteSource.title : ''}
           />
           <main className={styles.main}>
-            {loading && (
-              <div className={styles.progress}><CircularProgress size={80} /></div>
-            )}
-            <div className={loading ? styles.progressBlock : ''}>
-              <div className={styles.contentContainer}>
-                <Typography variant="h1" component="h2" gutterBottom>
-                  {currentSource ? currentSource.title : 'Rss from all sources'}
-                </Typography>
-                <SourceView
-                  rssItems={rssItems}
-                  onCardClick={this.setArticleId}
-                />
-              </div>
-            </div>
+            <SourceView
+              rssItems={rssItems}
+              title={currentSource ? currentSource.title : 'Rss from all sources'}
+              isLoading={isLoading}
+            />
           </main>
         </div>
       </>

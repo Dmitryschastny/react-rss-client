@@ -40,3 +40,22 @@
     width: 100%;
   }
 }
+
+.progressBlock {
+  opacity: 0.5;
+}
+
+.contentContainer {
+  background-color: #ffffff;
+  padding: 2rem;
+}
+
+.progress {
+  z-index: 5;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+}

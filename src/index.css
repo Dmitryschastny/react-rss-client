@@ -37,3 +37,7 @@ code {
 .grow {
   flex-grow: 1;
 }
+
+#root .containerSidebarOffest {
+  width: calc(100% - 240px);
+}
