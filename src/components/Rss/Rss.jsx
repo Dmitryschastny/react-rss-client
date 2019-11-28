@@ -1,12 +1,7 @@
 import React from 'react';
 import {
   CssBaseline,
-  Typography,
-  AppBar,
-  Toolbar,
-  IconButton,
 } from '@material-ui/core';
-import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/icons';
 
 import styles from './Rss.module.css';
 import Service from '../../Service';
@@ -14,7 +9,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import AddSourceDialog from '../AddSourceDialog/AddSourceDialog';
 import DeleteSourceDialog from '../DeleteSourceDialog/DeleteSourceDialog';
 import SourceView from '../SourceView/SourceView';
-// import { Delete } from '@material-ui/icons';
+import Header from '../Header/Header';
 
 let sourceId = 3;
 
@@ -200,32 +195,7 @@ export default class Rss extends React.Component {
     return (
       <>
         <CssBaseline />
-        <AppBar position="fixed" className={`${isDrawerOpen ? `${styles.appBarShift} containerSidebarOffest` : ''} ${styles.appBar}`}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={this.handleToggleDrawer}
-              edge="start"
-              className={isDrawerOpen ? styles.hidden : ''}
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className="grow" />
-            <Typography variant="body1" className={styles.toolbarText}>
-              Guest
-            </Typography>
-            <IconButton
-              color="inherit"
-              // aria-label="open drawer"
-              // onClick={this.handleToggleDrawer}
-              // className={isDrawerOpen ? styles.hidden : ''}
-              edge="end"
-            >
-              <PersonSharpIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <Header isDrawerOpen={isDrawerOpen} onToggleDrawer={this.handleToggleDrawer} />
         <div className={styles.container}>
           <nav className={styles.nav} hidden={!isDrawerOpen}>
             <Sidebar

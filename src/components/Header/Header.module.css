@@ -1,0 +1,15 @@
+.appBar.appBarShift {
+  left: 240px;
+}
+
+.appBar {
+  background-color: #ffffff;
+}
+
+.appBar .hidden {
+  display: none;
+}
+
+.appBar .toolbarText {
+  margin-right: 0.5rem;
+}
