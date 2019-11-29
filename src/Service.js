@@ -4,10 +4,11 @@ async function getFeed(feedUrl) {
   const parser = new Parser({
     customFields: {
       item: [['enclosure', { keepArray: true }]]
-    }
+    },
   });
 
   const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+  // const CORS_PROXY = 'https://crossorigin.me/';
 
   if (feedUrl) {
     try {
@@ -16,8 +17,6 @@ async function getFeed(feedUrl) {
       console.log(err);
       return null;
     }
-  } else {
-
   }
 
   return null;

@@ -2,22 +2,6 @@
   width: 240px;
 }
 
-.deleteIcon {
-  /* visibility: hidden; */
-  cursor: pointer;
-  opacity: 0.2;
-}
-
-.deleteIcon:hover {
-  opacity: 1;
-}
-
-.listItem {}
-
-/* .listItem:hover .deleteIcon {
-  visibility: visible;
-} */
-
 .header {
   display: flex;
   align-items: center;

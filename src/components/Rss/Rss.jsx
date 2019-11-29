@@ -4,10 +4,7 @@ import {
 } from '@material-ui/core';
 
 import styles from './Rss.module.css';
-import Service from '../../Service';
 import Sidebar from '../Sidebar/Sidebar';
-import AddSourceDialog from '../AddSourceDialog/AddSourceDialog';
-import DeleteSourceDialog from '../DeleteSourceDialog/DeleteSourceDialog';
 import SourceView from '../SourceView/SourceView';
 import Header from '../Header/Header';
 
@@ -18,165 +15,34 @@ export default class Rss extends React.Component {
     super(props);
 
     this.state = {
-      sources: [
-        {
-          id: 0,
-          title: 'tut by',
-          url: 'https://news.tut.by/rss/index.rss',
-        },
-        {
-          id: 1,
-          title: 'nasa',
-          url: 'https://www.nasa.gov/rss/dyn/breaking_news.rss',
-        },
-        {
-          id: 2,
-          title: 'Yandex auto',
-          url: 'https://news.yandex.ru/auto.rss',
-        },
-      ],
-      isAddDialog: false,
-      isDeleteDialog: false,
-      deleteSourceId: null,
-      selectedSourceId: 1,
+      // isAddDialog: false,
+      // isDeleteDialog: false,
+      // deleteSourceId: null,
+      // selectedSourceId: 1,
       isLoading: false,
-      sourceAddErrors: {},
+      // sourceAddErrors: {},
       rssItems: null,
       isDrawerOpen: true,
     };
 
     this.setSource = this.setSource.bind(this);
-    this.toggleSourceAddDialog = this.toggleSourceAddDialog.bind(this);
-    this.toggleSourceDeleteDialog = this.toggleSourceDeleteDialog.bind(this);
-    this.handleSourceAdd = this.handleSourceAdd.bind(this);
-    this.handleSourceDelete = this.handleSourceDelete.bind(this);
     this.handleToggleDrawer = this.handleToggleDrawer.bind(this);
   }
 
   async componentDidMount() {
-    this.setNews();
+    // this.setNews();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { selectedSourceId } = this.state;
+    // const { selectedSourceId } = this.state;
 
-    if (selectedSourceId !== prevState.selectedSourceId) {
-      this.setNews();
-    }
-  }
-
-  async setNews() {
-    const { selectedSourceId, sources } = this.state;
-
-    if (selectedSourceId !== null) {
-      const currentSource = sources.find((source) => source.id === selectedSourceId);
-
-      this.setState({ isLoading: true }, async () => {
-        const rss = await Service.getFeed(currentSource.url);
-
-        this.setState({
-          rssItems: rss.items || [],
-          isLoading: false,
-          selectedSourceId: currentSource.id,
-        });
-      });
-    } else {
-      const results = [];
-
-      for (let i = 0; i < sources.length; i += 1) {
-        results.push(Service.getFeed(sources[i].url));
-      }
-
-      this.setState({ isLoading: true }, async () => {
-        const rsses = await Promise.all(results);
-
-        const rssesItems = rsses.reduce((prev, rss) => [...prev, ...rss.items], []);
-
-        rssesItems.sort((a, b) => {
-          if (new Date(a.isoDate) < new Date(b.isoDate)) {
-            return 1;
-          }
-
-          if (new Date(a.isoDate) > new Date(b.isoDate)) {
-            return -1;
-          }
-
-          return 0;
-        });
-
-        this.setState({
-          rssItems: rssesItems,
-          isLoading: false,
-        });
-      });
-    }
+    // if (selectedSourceId !== prevState.selectedSourceId) {
+    //   this.setNews();
+    // }
   }
 
   setSource(id) {
     this.setState({ selectedSourceId: id });
-  }
-
-  async handleSourceAdd(url) {
-    const { sources } = this.state;
-    const errors = {};
-    const isAlreadyExists = sources.find((source) => source.url === url);
-
-    this.setState({ isLoading: true });
-
-    if (isAlreadyExists) {
-      errors.url = 'Rss with this source has already been added.';
-    }
-
-    const rss = await Service.getFeed(url);
-
-    if (!rss) {
-      errors.url = 'Error occured while parsing RSS, try a new one.';
-    }
-
-    if (!Object.getOwnPropertyNames(errors).length) {
-      this.setState({
-        sources: [...sources, {
-          id: sourceId,
-          title: rss.title,
-          url,
-        }],
-        isAddDialog: false,
-        isLoading: false,
-      });
-
-      sourceId += 1;
-
-      return;
-    }
-
-    this.setState({
-      sourceAddErrors: errors,
-      isLoading: false,
-    });
-  }
-
-  handleSourceDelete() {
-    this.setState((prevState) => ({
-      sources: prevState.sources.filter((source) => source.id !== prevState.deleteSourceId),
-      isDeleteDialog: false,
-      selectedSourceId: null,
-    }));
-  }
-
-  toggleSourceAddDialog() {
-    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddErrors: {} }));
-  }
-
-  toggleSourceDeleteDialog(id) {
-    this.setState((prevState) => {
-      const newState = { isDeleteDialog: !prevState.isDeleteDialog };
-
-      if (id !== undefined) {
-        newState.deleteSourceId = id;
-      }
-
-      return newState;
-    });
   }
 
   handleToggleDrawer() {
@@ -186,11 +52,10 @@ export default class Rss extends React.Component {
   render() {
     const {
       sources, isAddDialog, sourceAddErrors, isLoading, selectedSourceId, rssItems, isDeleteDialog,
-      deleteSourceId, isDrawerOpen,
+      isDrawerOpen,
     } = this.state;
 
-    const currentSource = sources.find((source) => source.id === selectedSourceId);
-    const deleteSource = sources.find((source) => source.id === deleteSourceId);
+    // const currentSource = sources.find((source) => source.id === selectedSourceId);
 
     return (
       <>
@@ -207,24 +72,10 @@ export default class Rss extends React.Component {
               toggleDrawer={this.handleToggleDrawer}
             />
           </nav>
-          <AddSourceDialog
-            isAddDialog={isAddDialog}
-            onSourceAdd={this.handleSourceAdd}
-            toggleDialog={this.toggleSourceAddDialog}
-            errors={sourceAddErrors}
-            isLoading={isLoading}
-          />
-          <DeleteSourceDialog
-            isDeleteDialog={isDeleteDialog}
-            onSourceDelete={this.handleSourceDelete}
-            toggleDialog={this.toggleSourceDeleteDialog}
-            isLoading={isLoading}
-            rssTitle={deleteSource ? deleteSource.title : ''}
-          />
           <main className={styles.main}>
             <SourceView
               rssItems={rssItems}
-              title={currentSource ? currentSource.title : 'Rss from all sources'}
+              // title={currentSource ? currentSource.title : 'Rss from all sources'}
               isLoading={isLoading}
             />
           </main>

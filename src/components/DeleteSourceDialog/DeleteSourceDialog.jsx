@@ -9,15 +9,14 @@ import {
 } from '@material-ui/core';
 
 export default function AddSourceDialog({
- isDeleteDialog, toggleDialog, onSourceDelete, loading, rssTitle
+  isOpen, toggleDialog, onSourceDelete, rssTitle
 }) {
   return (
     <Dialog
-      open={isDeleteDialog}
+      open={isOpen}
       onClose={() => toggleDialog()}
       fullWidth
     >
-      {loading && (<LinearProgress />)}
       <DialogTitle>Delete rss source</DialogTitle>
       <DialogContent>
         {`Are you sure you want to unsubscribe from "${rssTitle}?"`}

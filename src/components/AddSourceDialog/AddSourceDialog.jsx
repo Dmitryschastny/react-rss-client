@@ -36,8 +36,8 @@ export default class AddSourceDialog extends React.Component {
             label="Rss link"
             fullWidth
             inputRef={this.urlInputRef}
-            error={!!errors.url}
-            helperText={errors.url}
+            // error={!!errors.url}
+            // helperText={errors.url}
           />
         </DialogContent>
         <DialogActions>
