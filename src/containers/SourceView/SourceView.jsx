@@ -1,13 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Card, CardActionArea, CardMedia, CardContent, Typography, Grid, CircularProgress,
 } from '@material-ui/core';
 
 import styles from './SourceView.module.css';
 
-export default function SourceView({ rssItems, title, isLoading }) {
-  if (!rssItems) return null;
-
+function SourceView({ items, title, isLoading }) {
   const dateOptions = {
     year: 'numeric', month: 'long', day: 'numeric',
   };
@@ -23,7 +22,7 @@ export default function SourceView({ rssItems, title, isLoading }) {
             {title}
           </Typography>
           <Grid container spacing={4}>
-            {rssItems.map((item, index) => (
+            {items.map((item, index) => (
               <Grid key={index} item className={styles.gridItem}>
                 <Card className={styles.card}>
                   <CardActionArea className={styles.activeArea} onClick={() => window.open(item.link, '_blank')}>
@@ -58,3 +57,21 @@ export default function SourceView({ rssItems, title, isLoading }) {
     </>
   );
 }
+
+export default connect((state) => {
+  const currentSource = state.sources.items.find(
+    (item) => (item.id === state.sources.selectedSourceId),
+  );
+
+  let items = [];
+
+  if (currentSource && state.feeds.feedsByUrl[currentSource.url]) {
+    items = state.feeds.feedsByUrl[currentSource.url];
+  }
+
+  return {
+    items,
+    title: currentSource ? currentSource.title : '',
+    isLoading: state.feeds.isFetching,
+  };
+})(SourceView);

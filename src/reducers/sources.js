@@ -13,7 +13,7 @@ const sources = (state = { items: [], selectedSourceId: null }, action) => {
         ...state,
         items: state.items.filter((source) => source.id !== action.id),
       };
-    case 'SET_SELECTED_SOURCE_ID':
+    case 'SET_SELECTED_SOURCE':
       return {
         ...state,
         selectedSourceId: action.id,

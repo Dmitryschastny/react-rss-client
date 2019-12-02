@@ -15,7 +15,8 @@ import {
 import Service from '../../Service';
 import AddSourceDialog from '../../components/AddSourceDialog/AddSourceDialog';
 import DeleteSourceDialog from '../../components/DeleteSourceDialog/DeleteSourceDialog';
-import { addSource, deleteSource, setCurrentSourceId } from '../../actions';
+import { addSource, deleteSource, setSelectedSource } from '../../actions/sources';
+import { fetchFeed } from '../../actions/feed';
 import styles from './SourcesList.module.css';
 
 class SourceList extends React.Component {
@@ -37,7 +38,7 @@ class SourceList extends React.Component {
   }
 
   async handleSourceAdd(url) {
-    const { items, dispatch } = this.props;
+    const { items, onSourceAdd } = this.props;
     const errors = {};
     const isAlreadyExists = items.find((source) => source.url === url);
 
@@ -54,7 +55,7 @@ class SourceList extends React.Component {
     }
 
     if (!Object.getOwnPropertyNames(errors).length) {
-      dispatch(addSource(rss.title, url));
+      onSourceAdd(rss.title, url);
 
       this.setState({
         isAddDialog: false,
@@ -71,8 +72,8 @@ class SourceList extends React.Component {
   }
 
   handleSourceDelete(id) {
-    const { dispatch } = this.props;
-    dispatch(deleteSource(id));
+    const { onSourceDelete } = this.props;
+    onSourceDelete(id);
 
     this.setState({ isDeleteDialog: false });
   }
@@ -93,55 +94,8 @@ class SourceList extends React.Component {
     });
   }
 
-  // async setNews() {
-  //   const { selectedSourceId, items } = this.state;
-
-  //   if (selectedSourceId !== null) {
-  //     const currentSource = items.find((source) => source.id === selectedSourceId);
-
-  //     this.setState({ isLoading: true }, async () => {
-  //       const rss = await Service.getFeed(currentSource.url);
-
-  //       this.setState({
-  //         rssItems: rss.items || [],
-  //         isLoading: false,
-  //         selectedSourceId: currentSource.id,
-  //       });
-  //     });
-  //   } else {
-  //     const results = [];
-
-  //     for (let i = 0; i < items.length; i += 1) {
-  //       results.push(Service.getFeed(items[i].url));
-  //     }
-
-  //     this.setState({ isLoading: true }, async () => {
-  //       const rsses = await Promise.all(results);
-
-  //       const rssesItems = rsses.reduce((prev, rss) => [...prev, ...rss.items], []);
-
-  //       rssesItems.sort((a, b) => {
-  //         if (new Date(a.isoDate) < new Date(b.isoDate)) {
-  //           return 1;
-  //         }
-
-  //         if (new Date(a.isoDate) > new Date(b.isoDate)) {
-  //           return -1;
-  //         }
-
-  //         return 0;
-  //       });
-
-  //       this.setState({
-  //         rssItems: rssesItems,
-  //         isLoading: false,
-  //       });
-  //     });
-  //   }
-  // }
-
   render() {
-    const { items, selectedSourceId, dispatch } = this.props;
+    const { items, selectedSourceId, onSourceClick } = this.props;
     const {
       isAddDialog,
       isDeleteDialog,
@@ -173,7 +127,7 @@ class SourceList extends React.Component {
           <ListItem
             button
             selected={selectedSourceId === null}
-            onClick={() => dispatch(setCurrentSourceId(null))}
+            onClick={() => onSourceClick(null)}
           >
             <ListItemText primary="Show all" />
           </ListItem>
@@ -182,7 +136,7 @@ class SourceList extends React.Component {
               button
               key={item.id}
               selected={selectedSourceId === item.id}
-              onClick={() => dispatch(setCurrentSourceId(item.id))}
+              onClick={() => onSourceClick(item)}
               classes={{
                 container: styles.listItem,
               }}
@@ -206,4 +160,14 @@ class SourceList extends React.Component {
 export default connect((state) => ({
   items: state.sources.items,
   selectedSourceId: state.sources.selectedSourceId,
+}), (dispatch) => ({
+  onSourceClick: (item) => {
+    dispatch(setSelectedSource(item ? item.id : null));
+
+    if (item !== null) {
+      dispatch(fetchFeed(item.url));
+    }
+  },
+  onSourceDelete: (id) => dispatch(deleteSource(id)),
+  onSourceAdd: (title, url) => dispatch(addSource(title, url)),
 }))(SourceList);
