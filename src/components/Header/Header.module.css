@@ -13,3 +13,7 @@
 .appBar .toolbarText {
   margin-right: 0.5rem;
 }
+
+.popper {
+  padding: 1rem;
+}

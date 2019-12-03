@@ -4,6 +4,9 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  Popper,
+  Paper,
+  ClickAwayListener,
 } from '@material-ui/core';
 import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/icons';
 
@@ -12,10 +15,26 @@ import styles from './Header.module.css';
 export default class Header extends React.Component {
   constructor() {
     super();
+
+    this.state = {
+      anchorEl: null,
+    };
+
+    this.handlePopperOpen = this.handlePopperOpen.bind(this);
+    this.handlePopperClose = this.handlePopperClose.bind(this);
+  }
+
+  handlePopperOpen(event) {
+    this.setState({ anchorEl: event.currentTarget });
+  }
+
+  handlePopperClose() {
+    this.setState({ anchorEl: null });
   }
 
   render() {
     const { isDrawerOpen, onToggleDrawer } = this.props;
+    const { anchorEl } = this.state;
 
     return (
       <AppBar position="fixed" className={`${isDrawerOpen ? `${styles.appBarShift} containerSidebarOffest` : ''} ${styles.appBar}`}>
@@ -35,14 +54,28 @@ export default class Header extends React.Component {
           </Typography>
           <IconButton
             color="inherit"
-            // aria-label="open drawer"
-            // onClick={this.handleToggleDrawer}
-            // className={isDrawerOpen ? styles.hidden : ''}
-            edge="end"
+            onClick={this.handlePopperOpen}
           >
             <PersonSharpIcon />
           </IconButton>
         </Toolbar>
+        <Popper
+          open={!!anchorEl}
+          anchorEl={anchorEl}
+          modifiers={{
+            preventOverflow: {
+              enabled: true,
+              boundariesElement: 'scrollParent',
+            },
+          }}
+          disablePortal
+        >
+          <ClickAwayListener onClickAway={this.handlePopperClose}>
+            <Paper className={styles.popper}>
+              <Typography>The content of the Popper.</Typography>
+            </Paper>
+          </ClickAwayListener>
+        </Popper>
       </AppBar>
     );
   }
