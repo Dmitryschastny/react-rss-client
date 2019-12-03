@@ -1,4 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Typography,
   AppBar,
@@ -7,6 +9,7 @@ import {
   Popper,
   Paper,
   ClickAwayListener,
+  Link,
 } from '@material-ui/core';
 import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/icons';
 
@@ -35,6 +38,14 @@ export default class Header extends React.Component {
   render() {
     const { isDrawerOpen, onToggleDrawer } = this.props;
     const { anchorEl } = this.state;
+
+    const signInLink = React.forwardRef((props, ref) => (
+      <RouterLink innerRef={ref} to="/signin" {...props} />
+    ));
+
+    const signUpLink = React.forwardRef((props, ref) => (
+      <RouterLink innerRef={ref} to="/signup" {...props} />
+    ));
 
     return (
       <AppBar position="fixed" className={`${isDrawerOpen ? `${styles.appBarShift} containerSidebarOffest` : ''} ${styles.appBar}`}>
@@ -72,7 +83,13 @@ export default class Header extends React.Component {
         >
           <ClickAwayListener onClickAway={this.handlePopperClose}>
             <Paper className={styles.popper}>
-              <Typography>The content of the Popper.</Typography>
+              <Typography gutterBottom>
+                You are not logged in. Please log in to keep your data.
+              </Typography>
+              <div className="flexBetween">
+                <Link component={signInLink}>Sign in</Link>
+                <Link component={signUpLink}>Sign Up</Link>
+              </div>
             </Paper>
           </ClickAwayListener>
         </Popper>

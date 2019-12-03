@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 import Rss from '../Rss/Rss';
 import SignIn from '../SignIn/SignIn';
@@ -15,15 +15,17 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <Route path="/">
-          <Rss />
-        </Route>
-        <Route path="/signin">
-          <SignIn />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
+        <Switch>
+          <Route path="/signin">
+            <SignIn />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
+          </Route>
+          <Route path="/">
+            <Rss />
+          </Route>
+        </Switch>
       </BrowserRouter>
     );
   }

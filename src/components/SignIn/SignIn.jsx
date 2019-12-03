@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Button, Typography, Link } from '@material-ui/core';
+import { Link } from '@material-ui/core';
 
 import Form from '../Form/Form';
 
@@ -45,6 +45,10 @@ const SignIn = () => {
     <RouterLink innerRef={ref} to="/signup" {...props} />
   ));
 
+  const logInGuestLink = React.forwardRef((props, ref) => (
+    <RouterLink innerRef={ref} to="/" {...props} />
+  ));
+
   return (
     <Form
       values={{
@@ -65,7 +69,7 @@ const SignIn = () => {
       submitTitle="Sign in"
     >
       <div className="flexBetween">
-        <Link onClick={() => { }}>Log in as guest</Link>
+        <Link component={logInGuestLink}>Log in as guest</Link>
         <Link component={signUpLink}>Sign up</Link>
       </div>
     </Form>

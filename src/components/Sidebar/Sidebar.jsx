@@ -21,7 +21,7 @@ export default function Sidebar({ toggleDrawer, }) {
       }}
     >
       <div className={`${styles.header} ${styles.materialToolbar}`}>
-        <IconButton onClick={toggleDrawer}>
+        <IconButton onClick={toggleDrawer} classes={{ root: styles.arrow }}>
           <ChevronLeftIcon />
         </IconButton>
       </div>

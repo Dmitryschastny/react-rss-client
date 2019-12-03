@@ -32,6 +32,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer,
   {
+    isAuthorized: false,
+    user: {},
     sources: {
       selectedSourceId: null,
       items: mockSources,
