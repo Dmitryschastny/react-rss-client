@@ -27,7 +27,7 @@ class SourceList extends React.Component {
       isAddDialog: false,
       isDeleteDialog: false,
       deleteSourceId: null,
-      sourceAddErrors: {},
+      sourceAddError: null,
       isLoading: false,
     };
 
@@ -38,23 +38,18 @@ class SourceList extends React.Component {
   }
 
   async handleSourceAdd(url) {
-    const { items, onSourceAdd } = this.props;
-    const errors = {};
-    const isAlreadyExists = items.find((source) => source.url === url);
+    const { onSourceAdd } = this.props;
+    let error = null;
 
     this.setState({ isLoading: true });
-
-    if (isAlreadyExists) {
-      errors.url = 'Rss with this source has already been added.';
-    }
 
     const rss = await Service.getFeed(url);
 
     if (!rss) {
-      errors.url = 'Error occured while parsing RSS, try a new one.';
+      error = 'Error occured while parsing RSS, try a new one.';
     }
 
-    if (!Object.getOwnPropertyNames(errors).length) {
+    if (!error) {
       onSourceAdd(rss.title, url);
 
       this.setState({
@@ -66,7 +61,7 @@ class SourceList extends React.Component {
     }
 
     this.setState({
-      sourceAddErrors: errors,
+      sourceAddError: error,
       isLoading: false,
     });
   }
@@ -79,7 +74,7 @@ class SourceList extends React.Component {
   }
 
   toggleSourceAddDialog() {
-    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddErrors: {} }));
+    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddError: null }));
   }
 
   toggleSourceDeleteDialog(id) {
@@ -101,7 +96,7 @@ class SourceList extends React.Component {
       isDeleteDialog,
       deleteSourceId,
       isLoading,
-      sourceAddErrors,
+      sourceAddError,
     } = this.state;
 
     const deleteSourceItem = items.find((item) => item.id === deleteSourceId);
@@ -111,7 +106,7 @@ class SourceList extends React.Component {
           isAddDialog={isAddDialog}
           onSourceAdd={!isLoading ? this.handleSourceAdd : () => false}
           toggleDialog={!isLoading ? this.toggleSourceAddDialog : () => false}
-          errors={sourceAddErrors}
+          error={sourceAddError}
           loading={isLoading}
         />
         <DeleteSourceDialog

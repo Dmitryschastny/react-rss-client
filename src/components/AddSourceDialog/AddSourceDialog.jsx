@@ -18,7 +18,7 @@ export default class AddSourceDialog extends React.Component {
 
   render() {
     const {
-      isAddDialog, toggleDialog, onSourceAdd, errors, loading
+      isAddDialog, toggleDialog, onSourceAdd, error, loading,
     } = this.props;
 
     return (
@@ -36,13 +36,15 @@ export default class AddSourceDialog extends React.Component {
             label="Rss link"
             fullWidth
             inputRef={this.urlInputRef}
-            // error={!!errors.url}
-            // helperText={errors.url}
+            error={!!error}
+            helperText={error || ''}
           />
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => onSourceAdd(this.urlInputRef.current ? this.urlInputRef.current.value : null)}
+            onClick={
+              () => onSourceAdd(this.urlInputRef.current ? this.urlInputRef.current.value : null)
+            }
             color="primary"
           >
             Add

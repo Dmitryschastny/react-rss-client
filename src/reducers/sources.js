@@ -18,6 +18,8 @@ const sources = (state = { items: [], selectedSourceId: null }, action) => {
         ...state,
         selectedSourceId: action.id,
       };
+    case 'LOAD_SOURCES':
+      return { ...state, items: action.sources };
     default:
       return state;
   }
