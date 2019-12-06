@@ -1,0 +1,61 @@
+.gridItem {
+  width: 25%;
+}
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardButton {
+  visibility: hidden;
+}
+
+.card:hover .cardButton {
+  visibility: visible;
+}
+
+.activeArea {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+@media(max-width: 1440px) {
+  .gridItem {
+    width: 33%;
+  }
+}
+
+@media(max-width: 1280px) {
+  .gridItem {
+    width: 50%;
+  }
+}
+
+@media(max-width: 768px) {
+  .gridItem {
+    width: 100%;
+  }
+}
+
+.progressBlock {
+  opacity: 0.5;
+}
+
+.contentContainer {
+  background-color: #ffffff;
+  padding: 2rem;
+}
+
+.progress {
+  z-index: 5;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+}

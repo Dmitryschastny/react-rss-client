@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   List,
   ListItem,
@@ -13,15 +12,11 @@ import {
 } from '@material-ui/icons';
 
 import Service from '../../Service';
-import AddSourceDialog from '../../components/AddSourceDialog/AddSourceDialog';
-import DeleteSourceDialog from '../../components/DeleteSourceDialog/DeleteSourceDialog';
-import { thunkAddSource, thunkDeleteSource } from '../../store/sources/thunks';
-import { selectSource } from '../../store/sources/actions';
-import { thunkFetchFeed } from '../../store/feeds/thunks';
+import AddSourceDialog from '../AddSourceDialog';
+import DeleteSourceDialog from '../DeleteSourceDialog';
+
 import styles from './SourcesList.module.css';
 import { Source } from '../../store/sources/types';
-import { ApplicationState } from '../../store';
-import { ThunkDispatch } from 'redux-thunk';
 
 interface Props {
   itemsById: {
@@ -37,11 +32,11 @@ interface State {
   isAddDialog: boolean;
   isDeleteDialog: boolean;
   deleteSourceId: null | number;
-  sourceAddError: null | string;
+  sourceAddError: string;
   isLoading: boolean;
 }
 
-class SourceList extends React.Component<Props, State> {
+class SourcesList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -49,7 +44,7 @@ class SourceList extends React.Component<Props, State> {
       isAddDialog: false,
       isDeleteDialog: false,
       deleteSourceId: null,
-      sourceAddError: null,
+      sourceAddError: '',
       isLoading: false,
     };
 
@@ -98,10 +93,13 @@ class SourceList extends React.Component<Props, State> {
   }
 
   toggleSourceAddDialog() {
-    this.setState((prevState) => ({ isAddDialog: !prevState.isAddDialog, sourceAddError: null }));
+    this.setState((prevState) => ({
+      isAddDialog: !prevState.isAddDialog,
+      sourceAddError: ''
+    }));
   }
 
-  toggleSourceDeleteDialog(id: number) {
+  toggleSourceDeleteDialog(id?: number) {
     this.setState((prevState) => {
       return {
         isDeleteDialog: !prevState.isDeleteDialog,
@@ -177,19 +175,4 @@ class SourceList extends React.Component<Props, State> {
   }
 }
 
-export default connect((state: ApplicationState) => ({
-  itemsById: state.sources.byId,
-  selectedSourceId: state.sources.selectedSourceId,
-}), (dispatch: ThunkDispatch<{}, {}, any>) => ({
-  onSourceClick: (item: Source | null) => {
-    dispatch(selectSource(item ? item.id : null));
-
-    if (item !== null) {
-      dispatch(thunkFetchFeed(item.url));
-    }
-  },
-  onSourceAdd: (title: string, url: string) => {
-    dispatch(thunkAddSource(title, url));
-  },
-  onSourceDelete: (id: number) => dispatch(thunkDeleteSource(id)),
-}))(SourceList);
+export default SourcesList;

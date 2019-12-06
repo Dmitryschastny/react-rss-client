@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   Card, CardActionArea, CardMedia, CardContent, Typography, Grid, CircularProgress,
 } from '@material-ui/core';
 
 import styles from './SourceView.module.css';
-import { ApplicationState } from '../../store';
 
 interface Props {
   items: any[];
@@ -67,22 +65,4 @@ const SourceView: React.FC<Props> = ({ items, title, isLoading }) => {
   );
 }
 
-export default connect((state: ApplicationState) => {
-  if (state.sources.selectedSourceId !== null) {
-    const currentSource = state.sources.byId[state.sources.selectedSourceId];
-
-    if (state.feeds.feedsByUrl[currentSource.url]) {
-      return {
-        items: state.feeds.feedsByUrl[currentSource.url],
-        title: currentSource.title,
-        isLoading: state.feeds.isFetching
-      }
-    }
-  }
-
-  return {
-    items: [],
-    title: '',
-    isLoading: state.feeds.isFetching,
-  };
-})(SourceView);
+export default SourceView;

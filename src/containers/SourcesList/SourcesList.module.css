@@ -1,9 +1,0 @@
-.deleteIcon {
-  /* visibility: hidden; */
-  cursor: pointer;
-  opacity: 0.2;
-}
-
-.deleteIcon:hover {
-  opacity: 1;
-}

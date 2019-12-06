@@ -4,9 +4,9 @@ import {
 } from '@material-ui/core';
 
 import styles from './Rss.module.css';
-import Sidebar from '../Sidebar/Sidebar';
-import SourceView from '../../containers/SourceView/SourceView';
-import Header from '../Header/Header';
+import Sidebar from '../Sidebar';
+import SourceViewContainer from '../../containers/SourceViewContainer';
+import Header from '../Header';
 
 interface State {
   isDrawerOpen: boolean;
@@ -39,7 +39,7 @@ export default class Rss extends React.Component<{}, State> {
             <Sidebar onToggleDrawer={this.handleToggleDrawer} />
           </nav>
           <main className={styles.main}>
-            <SourceView />
+            <SourceViewContainer />
           </main>
         </div>
       </>
