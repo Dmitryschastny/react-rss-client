@@ -15,9 +15,18 @@ import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/i
 
 import styles from './Header.module.css';
 
-export default class Header extends React.Component {
-  constructor() {
-    super();
+interface Props {
+  isDrawerOpen: boolean;
+  onToggleDrawer: React.MouseEventHandler<any>;
+}
+
+interface State {
+  anchorEl: any;
+}
+
+export default class Header extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
 
     this.state = {
       anchorEl: null,
@@ -27,7 +36,7 @@ export default class Header extends React.Component {
     this.handlePopperClose = this.handlePopperClose.bind(this);
   }
 
-  handlePopperOpen(event) {
+  handlePopperOpen(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     this.setState({ anchorEl: event.currentTarget });
   }
 
@@ -39,11 +48,11 @@ export default class Header extends React.Component {
     const { isDrawerOpen, onToggleDrawer } = this.props;
     const { anchorEl } = this.state;
 
-    const signInLink = React.forwardRef((props, ref) => (
+    const signInLink = React.forwardRef((props, ref: React.Ref<HTMLAnchorElement>) => (
       <RouterLink innerRef={ref} to="/signin" {...props} />
     ));
 
-    const signUpLink = React.forwardRef((props, ref) => (
+    const signUpLink = React.forwardRef((props, ref: React.Ref<HTMLAnchorElement>) => (
       <RouterLink innerRef={ref} to="/signup" {...props} />
     ));
 
