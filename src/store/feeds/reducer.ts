@@ -1,5 +1,3 @@
-import { Reducer } from 'redux';
-
 import {
   FeedsState,
   FETCH_FEED_REQUEST,

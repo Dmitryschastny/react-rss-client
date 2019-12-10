@@ -1,46 +1,37 @@
-import { ThunkAction } from "redux-thunk";
-import { Action } from "redux";
+import { AnyAction } from "redux";
+import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
-import { ApplicationState } from "..";
-import { addSource, deleteSource } from "./actions";
+import { addSource, deleteSource, loadSources, selectSource } from "./actions";
+import { db } from '../../utils/api';
 
-export const thunkAddSource = (
-  title: string,
-  url: string,
-): ThunkAction<void, ApplicationState, null, Action<string>> => async (dispatch) => {
-  // const db = await idb.openDB('clientDatabase', 1);
+export const thunkAddSource = (title: string, url: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    const userId = 0;
 
-  // const id = await db.put('sources', { title, url });
+    const id = await db.create('sources', { title, url, userId });
 
-  dispatch(addSource({
-    id: 0,
-    userId: 0,
-    title,
-    url,
-  }));
-}
+    dispatch(addSource({
+      id,
+      userId,
+      title,
+      url,
+    }));
+  }
+);
 
-export const thunkDeleteSource = (
-  id: number
-): ThunkAction<void, ApplicationState, null, Action<string>> => async (dispatch) => {
-  // async (dispatch: Dispatch) => {
-  //   // const db = await idb.openDB('clientDatabase', 1);
+export const thunkDeleteSource = (id: number): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    await db.delete('sources', id);
 
-  //   // await db.delete('sources', id);
+    dispatch(selectSource(null));
+    dispatch(deleteSource(id));
+  }
+);
 
-  dispatch(deleteSource(id));
-};
+export const thunkLoadSources = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    const sources = await db.getAll('sources');
 
-// export const loadSources = () => async (dispatch) => {
-//   const db = await idb.openDB('clientDatabase', 1);
-
-//   const res = await db.getAll('sources');
-//   const keys = await db.getAllKeys('sources');
-
-//   const sources = res.map((item, index) => ({ ...item, id: keys[index] }));
-
-//   dispatch({
-//     type: LOAD_SOURCES,
-//     sources,
-//   });
-// };
+    dispatch(loadSources(sources));
+  }
+);

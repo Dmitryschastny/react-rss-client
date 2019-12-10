@@ -11,7 +11,7 @@ import {
   Close as DeleteIcon,
 } from '@material-ui/icons';
 
-import Service from '../../Service';
+import { getFeed } from '../../utils/api';
 import AddSourceDialog from '../AddSourceDialog';
 import DeleteSourceDialog from '../DeleteSourceDialog';
 
@@ -60,7 +60,7 @@ class SourcesList extends React.Component<Props, State> {
 
     this.setState({ isLoading: true });
 
-    const rss = await Service.getFeed(url);
+    const rss = await getFeed(url);
 
     if (!rss) {
       error = 'Error occured while parsing RSS, try a new one.';
@@ -159,7 +159,7 @@ class SourcesList extends React.Component<Props, State> {
                 }}
               >
                 <ListItemText primary={item.title} />
-                <ListItemSecondaryAction onClick={() => this.toggleSourceDeleteDialog(item.id)}>
+                <ListItemSecondaryAction onClick={() => this.toggleSourceDeleteDialog(parseInt(key))}>
                   <DeleteIcon className={styles.deleteIcon} />
                 </ListItemSecondaryAction>
               </ListItem>

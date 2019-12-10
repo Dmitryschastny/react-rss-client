@@ -1,18 +1,19 @@
-import { ThunkAction } from 'redux-thunk';
-import { Dispatch } from 'redux';
+import { AnyAction } from "redux";
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
-import Service from '../../Service';
+import { getFeed } from '../../utils/api';
 import { fetchFeedRequest, fetchFeedSuccess } from './actions';
 
-// async action creator
-export const thunkFetchFeed = (url: string) => async (dispatch: Dispatch) => {
-  dispatch(fetchFeedRequest());
+export const thunkFetchFeed = (url: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(fetchFeedRequest());
 
-  const rss = await Service.getFeed(url);
+    const rss = await getFeed(url);
 
-  // if (!rss) {
-  //   dispatch(fetchFeedFailure('Error occured while parsing RSS.'));
-  // }
+    // if (!rss) {
+    //   dispatch(fetchFeedFailure('Error occured while parsing RSS.'));
+    // }
 
-  dispatch(fetchFeedSuccess(url, rss.items));
-}
+    dispatch(fetchFeedSuccess(url, rss.items));
+  }
+);

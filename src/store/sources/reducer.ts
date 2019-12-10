@@ -1,4 +1,11 @@
-import { SourcesState, ADD_SOURCE, DELETE_SOURCE, SELECT_SOURCE, SourcesActionTypes } from './types';
+import {
+  SourcesState,
+  ADD_SOURCE,
+  DELETE_SOURCE,
+  SELECT_SOURCE,
+  LOAD_SOURCES,
+  SourcesActionTypes
+} from './types';
 
 export const initialState: SourcesState = {
   byId: {},
@@ -26,8 +33,11 @@ const sources = (state = initialState, action: SourcesActionTypes) => {
         ...state,
         selectedSourceId: action.id,
       };
-    // case 'LOAD_SOURCES':
-    //   return { ...state, items: action.sources };
+    case LOAD_SOURCES:
+      return {
+        ...state,
+        byId: action.sources
+      };
     default:
       return state;
   }

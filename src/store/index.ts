@@ -1,4 +1,4 @@
-import { combineReducers, Dispatch, Reducer, Action, AnyAction } from 'redux';
+import { combineReducers } from 'redux';
 
 import { SourcesState } from './sources/types';
 import { sourcesReducer } from './sources/reducer';

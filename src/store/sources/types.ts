@@ -13,7 +13,7 @@ export interface SourcesState {
 export const ADD_SOURCE = 'ADD_SOURCE';
 export const DELETE_SOURCE = 'DELETE_SOURCE';
 export const SELECT_SOURCE = 'SELECT_SOURCE';
-// const LOAD_SOURCES = 'LOAD_SOURCES';
+export const LOAD_SOURCES = 'LOAD_SOURCES';
 
 interface AddSourceAction extends Source {
   type: typeof ADD_SOURCE;
@@ -26,7 +26,12 @@ interface DeleteSourceAction {
 
 interface SelectSourceAction {
   type: typeof SELECT_SOURCE;
-  id: number| null;
+  id: number | null;
 }
 
-export type SourcesActionTypes = AddSourceAction | DeleteSourceAction | SelectSourceAction;
+interface LoadSourcesAction {
+  type: typeof LOAD_SOURCES;
+  sources: { [key: number]: Source };
+}
+
+export type SourcesActionTypes = AddSourceAction | DeleteSourceAction | SelectSourceAction | LoadSourcesAction;
