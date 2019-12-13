@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { thunkAddSource, thunkDeleteSource } from '../../store/sources/thunks';
-import { selectSource } from '../../store/sources/actions';
+import { selectSource, toggleSourceAddDialog, toggleSourceDeleteDialog } from '../../store/sources/actions';
 import { thunkFetchFeed } from '../../store/feeds/thunks';
 import { ApplicationState } from '../../store';
 
@@ -20,8 +19,6 @@ export default connect((state: ApplicationState) => ({
       dispatch(thunkFetchFeed(item.url));
     }
   },
-  onSourceAdd: (title: string, url: string) => {
-    dispatch(thunkAddSource(title, url));
-  },
-  onSourceDelete: (id: number) => dispatch(thunkDeleteSource(id)),
+  toggleSourceAddDialog: () => dispatch(toggleSourceAddDialog()),
+  toggleSourceDeleteDialog: (id: null | number) => dispatch(toggleSourceDeleteDialog(id)),
 }))(SourcesList);

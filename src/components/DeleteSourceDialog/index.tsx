@@ -29,7 +29,7 @@ const AddSourceDialog: React.FC<Props> = ({
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => onSourceDelete()}
+          onClick={onSourceDelete}
           color="primary"
         >
           Yes

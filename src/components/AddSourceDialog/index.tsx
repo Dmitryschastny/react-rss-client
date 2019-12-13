@@ -10,10 +10,10 @@ import {
 } from '@material-ui/core';
 
 interface Props {
-  isAddDialog: boolean;
+  isOpen: boolean;
   toggleDialog(): void;
   onSourceAdd(url: string): void;
-  error: string;
+  error: null | string;
   loading: boolean;
 }
 
@@ -28,13 +28,13 @@ export default class AddSourceDialog extends React.Component<Props> {
 
   render() {
     const {
-      isAddDialog, toggleDialog, onSourceAdd, error, loading,
+      isOpen, toggleDialog, onSourceAdd, error, loading,
     } = this.props;
 
     return (
       <Dialog
-        open={isAddDialog}
-        onClose={() => toggleDialog()}
+        open={isOpen}
+        onClose={loading ? () => false : () => toggleDialog()}
         fullWidth
       >
         {loading && (<LinearProgress />)}

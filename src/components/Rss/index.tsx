@@ -4,6 +4,8 @@ import {
 } from '@material-ui/core';
 
 import styles from './Rss.module.css';
+import AddSourceDialogContainer from '../../containers/AddSourceDialogContainer';
+import DeleteSourceDialogContainer from '../../containers/DeleteSourceDialogContainer';
 import Sidebar from '../Sidebar';
 import SourceViewContainer from '../../containers/SourceViewContainer';
 import Header from '../Header';
@@ -42,6 +44,8 @@ export default class Rss extends React.Component<{}, State> {
             <SourceViewContainer />
           </main>
         </div>
+        <AddSourceDialogContainer />
+        <DeleteSourceDialogContainer />
       </>
     );
   }

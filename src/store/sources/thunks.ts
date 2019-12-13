@@ -1,30 +1,39 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
-import { addSource, deleteSource, loadSources, selectSource } from "./actions";
+import { deleteSource, loadSources, selectSource, toggleSourceDeleteDialog } from "./actions";
 import { db } from '../../utils/api';
+import { ApplicationState } from "..";
 
-export const thunkAddSource = (title: string, url: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
-  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const userId = 0;
+// export const thunkAddSource = (title: string, url: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+//   async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+//     const userId = 0;
 
-    const id = await db.create('sources', { title, url, userId });
+//     const id = await db.create('sources', { title, url, userId });
 
-    dispatch(addSource({
-      id,
-      userId,
-      title,
-      url,
-    }));
-  }
-);
+//     dispatch(addSource({
+//       id,
+//       userId,
+//       title,
+//       url,
+//     }));
+//   }
+// );
 
-export const thunkDeleteSource = (id: number): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
-  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    await db.delete('sources', id);
+export const thunkDeleteSource = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+  async (dispatch: ThunkDispatch<{}, {}, AnyAction>, getState): Promise<void> => {
 
-    dispatch(selectSource(null));
-    dispatch(deleteSource(id));
+    const state = <ApplicationState>getState();
+    const id = state.sources.deleteSourceId;
+
+    if (id) {
+      await db.delete('sources', id);
+
+      dispatch(selectSource(null));
+      dispatch(deleteSource(id));
+      dispatch(toggleSourceDeleteDialog(null));
+    }
+
   }
 );
 

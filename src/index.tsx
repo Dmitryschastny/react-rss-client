@@ -5,8 +5,9 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 
-import rootReducer from './store';
+import rootReducer, { rootSaga } from './store';
 import './index.css';
 import App from './components/App';
 import { thunkLoadSources } from './store/sources/thunks';
@@ -20,6 +21,11 @@ const initialState: ApplicationState = {
   sources: {
     byId: {},
     selectedSourceId: null,
+    deleteSourceId: null,
+    isLoading: false,
+    errorMessage: null,
+    isAddDialog: false,
+    isDeleteDialog: false,
   },
   feeds: {
     isFetching: false,
@@ -27,13 +33,15 @@ const initialState: ApplicationState = {
   },
 }
 
+const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   rootReducer,
   initialState,
   composeWithDevTools(
-    applyMiddleware(thunkMiddleware, logger),
+    applyMiddleware(thunkMiddleware, logger, sagaMiddleware),
   )
 );
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -44,7 +52,7 @@ ReactDOM.render(
 
 (async () => {
   await db.init();
-  store.dispatch<any>(thunkLoadSources());
+  // store.dispatch<any>(thunkLoadSources());
 })();
 
 // If you want your app to work offline and load faster, you can change

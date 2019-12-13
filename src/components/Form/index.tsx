@@ -10,11 +10,11 @@ import styles from './Form.module.css';
 interface Props {
   values: { [key: string]: string; };
   labels: { [key: string]: string; };
-  types: { [key: string]: string; };
   onSubmit(values: Object): void;
-  children: React.ReactChildren;
   title: string;
-  submitTitle?: string
+  children: React.ReactChildren;
+  submitTitle?: string;
+  types: { [key: string]: string; };
 }
 
 const Form: React.FC<Props> = ({

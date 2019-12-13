@@ -1,41 +1,11 @@
+import { all } from 'redux-saga/effects';
 import { combineReducers } from 'redux';
 
 import { SourcesState } from './sources/types';
 import { sourcesReducer } from './sources/reducer';
 import { FeedsState } from './feeds/types';
 import { feedsReducer } from './feeds/reducer';
-// const exampleStore: Store = {
-//   isAuthorized: false,
-//   users: {
-//     byId: {
-//       1: {
-//         id: 1,
-//         username: 'guest',
-//         password: '',
-//       },
-//       2: {
-//         id: 1,
-//         username: '',
-//         password: '',
-//       },
-//     },
-//   },
-//   selectedSourceId: null,
-//   sources: {
-//     byId: {
-//       1: {
-//         id: 1,
-//         userId: 1,
-//         url: 'https://test',
-//         title: 'test',
-//       },
-//     },
-//   },
-//   feeds: {
-//     isFetching: false,
-//     feedsByUrl: {},
-//   },
-// };
+import sourcesSaga from './sources/sagas';
 
 export interface ApplicationState {
   // isAuthorized: boolean;
@@ -50,3 +20,7 @@ export default combineReducers({
   sources: sourcesReducer,
   feeds: feedsReducer,
 });
+
+export function* rootSaga() {
+  yield all([sourcesSaga()])
+}
