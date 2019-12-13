@@ -10,7 +10,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './store';
 import './index.css';
 import App from './components/App';
-import { thunkLoadSources } from './store/sources/thunks';
+import { loadSourcesRequested } from './store/sources/actions';
 import * as serviceWorker from './serviceWorker';
 import { db } from './utils/api';
 import { ApplicationState } from './store';
@@ -52,7 +52,7 @@ ReactDOM.render(
 
 (async () => {
   await db.init();
-  // store.dispatch<any>(thunkLoadSources());
+  store.dispatch<any>(loadSourcesRequested());
 })();
 
 // If you want your app to work offline and load faster, you can change

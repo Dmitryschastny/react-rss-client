@@ -1,7 +1,7 @@
 import { call, put, takeEvery, all, takeLatest } from 'redux-saga/effects';
 
 import { SourcesActions } from './types';
-import { addSourceSucceeded, addSourceFailed, toggleSourceAddDialog } from "./actions";
+import { addSourceSucceeded, addSourceFailed, toggleSourceAddDialog, loadSourcesSucceeded, loadSourcesFailed } from "./actions";
 import { getFeed } from '../../utils/api';
 import { db } from '../../utils/api';
 
@@ -12,7 +12,7 @@ export async function getRssTitle(url: string): Promise<string> {
   } else {
     return rss.title;
   }
-}
+};
 
 export function* addSource(action: any) {
   try {
@@ -34,7 +34,16 @@ export function* addSource(action: any) {
   } catch (error) {
     yield put(addSourceFailed(error.message))
   }
-}
+};
+
+export function* loadSources() {
+  try {
+    const sources = yield call(db.getAll, 'sources');
+    yield put(loadSourcesSucceeded(sources))
+  } catch (error) {
+    yield put(loadSourcesFailed(error.message));
+  }
+};
 
 function* watchAddSource() {
   // takeEvery allows multiple addSource instances to be started concurrently.
@@ -45,10 +54,15 @@ function* watchAddSource() {
   // takeLatest run only the latest started task
   // If a previous task is still running when another addSource task is started, the previous task will be automatically cancelled.
   yield takeLatest(SourcesActions.ADD_SOURCE_REQUESTED, addSource);
-}
+};
+
+function* watchLoadSources() {
+  yield takeLatest(SourcesActions.LOAD_SOURCES_REQUESTED, loadSources);
+};
 
 export default function* sourcesSaga() {
   yield all([
-    watchAddSource()
+    watchAddSource(),
+    watchLoadSources(),
   ])
 }

@@ -21,7 +21,9 @@ export enum SourcesActions {
   ADD_SOURCE_FAILED = 'ADD_SOURCE_FAILED',
   DELETE_SOURCE = 'DELETE_SOURCE',
   SELECT_SOURCE = 'SELECT_SOURCE',
-  LOAD_SOURCES = 'LOAD_SOURCES',
+  LOAD_SOURCES_REQUESTED = 'LOAD_SOURCES_REQUESTED',
+  LOAD_SOURCES_SUCCEEDED = 'LOAD_SOURCES_SUCCEEDED',
+  LOAD_SOURCES_FAILED = 'LOAD_SOURCES_FAILED',
   TOGGLE_SOURCE_DELETE_DIALOG = 'TOGGLE_SOURCE_DELETE_DIALOG',
   TOGGLE_SOURCE_ADD_DIALOG = 'TOGGLE_SOURCE_ADD_DIALOG',
 }
@@ -45,14 +47,23 @@ interface DeleteSourceAction {
   id: number;
 }
 
+interface LoadSourcesRequestedAction {
+  type: SourcesActions.LOAD_SOURCES_REQUESTED;
+}
+
+interface LoadSourcesSucceededAction {
+  type: SourcesActions.LOAD_SOURCES_SUCCEEDED;
+  sources: { [key: number]: Source };
+}
+
+interface LoadSourcesFailedAction {
+  type: SourcesActions.LOAD_SOURCES_FAILED;
+  error: string;
+}
+
 interface SelectSourceAction {
   type: SourcesActions.SELECT_SOURCE;
   id: number | null;
-}
-
-interface LoadSourcesAction {
-  type: SourcesActions.LOAD_SOURCES;
-  sources: { [key: number]: Source };
 }
 
 interface ToggleSourceAddDialogAction {
@@ -72,4 +83,6 @@ export type SourcesActionTypes =
   SelectSourceAction |
   ToggleSourceAddDialogAction |
   ToggleSourceDeleteDialogAction |
-  LoadSourcesAction;
+  LoadSourcesRequestedAction |
+  LoadSourcesSucceededAction |
+  LoadSourcesFailedAction;

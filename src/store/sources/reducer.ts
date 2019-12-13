@@ -49,7 +49,7 @@ const sources = (state = initialState, action: SourcesActionTypes) => {
         ...state,
         selectedSourceId: action.id,
       };
-    case SourcesActions.LOAD_SOURCES:
+    case SourcesActions.LOAD_SOURCES_SUCCEEDED:
       return {
         ...state,
         byId: action.sources

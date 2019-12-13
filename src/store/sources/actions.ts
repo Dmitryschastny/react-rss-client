@@ -29,9 +29,18 @@ export const selectSource = (id: number | null): SourcesActionTypes => ({
   id,
 });
 
-export const loadSources = (sources: { [key: number]: Source }): SourcesActionTypes => ({
-  type: SourcesActions.LOAD_SOURCES,
+export const loadSourcesRequested = (): SourcesActionTypes => ({
+  type: SourcesActions.LOAD_SOURCES_REQUESTED,
+});
+
+export const loadSourcesSucceeded = (sources: { [key: number]: Source }): SourcesActionTypes => ({
+  type: SourcesActions.LOAD_SOURCES_SUCCEEDED,
   sources,
+});
+
+export const loadSourcesFailed = (error: string): SourcesActionTypes => ({
+  type: SourcesActions.LOAD_SOURCES_FAILED,
+  error,
 });
 
 export const toggleSourceAddDialog = (): SourcesActionTypes => ({

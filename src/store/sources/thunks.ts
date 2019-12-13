@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
-import { deleteSource, loadSources, selectSource, toggleSourceDeleteDialog } from "./actions";
+import { deleteSource, selectSource, toggleSourceDeleteDialog } from "./actions";
 import { db } from '../../utils/api';
 import { ApplicationState } from "..";
 
@@ -37,10 +37,10 @@ export const thunkDeleteSource = (): ThunkAction<Promise<void>, {}, {}, AnyActio
   }
 );
 
-export const thunkLoadSources = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
-  async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const sources = await db.getAll('sources');
+// export const thunkLoadSources = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => (
+//   async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+//     const sources = await db.getAll('sources');
 
-    dispatch(loadSources(sources));
-  }
-);
+//     dispatch(loadSources(sources));
+//   }
+// );
