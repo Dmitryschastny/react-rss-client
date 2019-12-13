@@ -59,7 +59,7 @@ export default class AddSourceDialog extends React.Component<Props> {
           >
             Add
           </Button>
-          <Button onClick={() => toggleDialog()} color="primary">
+          <Button onClick={loading ? () => false : () => toggleDialog()} color="primary">
             Cancel
           </Button>
         </DialogActions>

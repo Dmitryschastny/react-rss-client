@@ -25,7 +25,8 @@ const sources = (state = initialState, action: SourcesActionTypes) => {
       return {
         ...state,
         byId: {
-          [action.id]: { id: action.id, title: action.title, url: action.url, userId: action.userId }
+          ...state.byId,
+          [action.id]: { id: action.id, title: action.title, url: action.url, userId: action.userId },
         },
         isLoading: false,
       };
