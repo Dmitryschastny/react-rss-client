@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 import Rss from '../Rss';
-import SignIn from '../SignIn';
+import SignInContainer from '../../containers/SignInContainer';
 import SignUp from '../SignUp';
 
 class App extends React.Component<{}> {
@@ -17,7 +17,7 @@ class App extends React.Component<{}> {
       <BrowserRouter>
         <Switch>
           <Route path="/signin">
-            <SignIn />
+            <SignInContainer />
           </Route>
           <Route path="/signup">
             <SignUp />

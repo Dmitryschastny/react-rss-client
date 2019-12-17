@@ -3,7 +3,7 @@ import React from 'react';
 import {
   useFormik,
 } from 'formik';
-import { TextField, Button, Typography } from '@material-ui/core';
+import { TextField, Button, Typography, LinearProgress } from '@material-ui/core';
 
 import styles from './Form.module.css';
 
@@ -12,9 +12,11 @@ interface Props {
   labels: { [key: string]: string; };
   onSubmit(values: Object): void;
   title: string;
-  children: React.ReactChildren;
+  children?: React.ReactNode;
   submitTitle?: string;
   types: { [key: string]: string; };
+  submitError?: string | null;
+  loading?: boolean;
 }
 
 const Form: React.FC<Props> = ({
@@ -25,6 +27,8 @@ const Form: React.FC<Props> = ({
   children,
   submitTitle,
   types,
+  submitError,
+  loading
 }) => {
   const formik = useFormik({
     initialValues: values,
@@ -51,6 +55,7 @@ const Form: React.FC<Props> = ({
         className={styles.form}
       >
         <Typography variant="h3" component="h3">{title}</Typography>
+        {loading && (<LinearProgress />)}
         {Object.keys(values).map((key) => (
           <TextField
             className={styles.formItem}
@@ -73,6 +78,9 @@ const Form: React.FC<Props> = ({
         >
           {submitTitle || 'Submit'}
         </Button>
+        <Typography color="error" gutterBottom>
+          {submitError}
+        </Typography>
         {children}
       </form>
     </div>

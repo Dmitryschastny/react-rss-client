@@ -8,7 +8,7 @@ import AddSourceDialogContainer from '../../containers/AddSourceDialogContainer'
 import DeleteSourceDialogContainer from '../../containers/DeleteSourceDialogContainer';
 import Sidebar from '../Sidebar';
 import SourceViewContainer from '../../containers/SourceViewContainer';
-import Header from '../Header';
+import HeaderContainer from '../../containers/HeaderContainer';
 
 interface State {
   isDrawerOpen: boolean;
@@ -35,7 +35,7 @@ export default class Rss extends React.Component<{}, State> {
     return (
       <>
         <CssBaseline />
-        <Header isDrawerOpen={isDrawerOpen} onToggleDrawer={this.handleToggleDrawer} />
+        <HeaderContainer isDrawerOpen={isDrawerOpen} onToggleDrawer={this.handleToggleDrawer} />
         <div className={styles.container}>
           <nav className={styles.nav} hidden={!isDrawerOpen}>
             <Sidebar onToggleDrawer={this.handleToggleDrawer} />

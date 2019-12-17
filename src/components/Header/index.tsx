@@ -10,6 +10,7 @@ import {
   Paper,
   ClickAwayListener,
   Link,
+  Button,
 } from '@material-ui/core';
 import { Menu as MenuIcon, PersonSharp as PersonSharpIcon } from '@material-ui/icons';
 
@@ -18,6 +19,9 @@ import styles from './Header.module.css';
 interface Props {
   isDrawerOpen: boolean;
   onToggleDrawer: React.MouseEventHandler<any>;
+  isAuthorized: boolean;
+  onLogout(): void;
+  userEmail: string;
 }
 
 interface State {
@@ -45,7 +49,7 @@ export default class Header extends React.Component<Props, State> {
   }
 
   render() {
-    const { isDrawerOpen, onToggleDrawer } = this.props;
+    const { isDrawerOpen, onToggleDrawer, isAuthorized, onLogout, userEmail } = this.props;
     const { anchorEl } = this.state;
 
     const signInLink = React.forwardRef((props, ref: React.Ref<HTMLAnchorElement>) => (
@@ -70,7 +74,7 @@ export default class Header extends React.Component<Props, State> {
           </IconButton>
           <div className="grow" />
           <Typography variant="body1" className={styles.toolbarText}>
-            Guest
+            {userEmail}
           </Typography>
           <IconButton
             color="inherit"
@@ -92,13 +96,26 @@ export default class Header extends React.Component<Props, State> {
         >
           <ClickAwayListener onClickAway={this.handlePopperClose}>
             <Paper className={styles.popper}>
-              <Typography gutterBottom>
-                You are not logged in. Please log in to keep your data.
-              </Typography>
-              <div className="flexBetween">
-                <Link component={signInLink}>Sign in</Link>
-                <Link component={signUpLink}>Sign Up</Link>
-              </div>
+              {!isAuthorized ? (
+                <>
+                  <Typography gutterBottom>
+                    You are not logged in. Please log in to keep your data.
+                  </Typography>
+                  <div className="flexBetween">
+                    <Link component={signInLink}>Sign in</Link>
+                    <Link component={signUpLink}>Sign Up</Link>
+                  </div>
+                </>
+              ) : (
+                  <div className="flexEnd">
+                    <Button
+                      onClick={() => { onLogout() }}
+                      color="primary"
+                    >
+                      Logout
+                  </Button>
+                  </div>
+                )}
             </Paper>
           </ClickAwayListener>
         </Popper>
