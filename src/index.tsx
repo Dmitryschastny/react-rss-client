@@ -10,14 +10,18 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './store';
 import './index.css';
 import App from './components/App';
-import { loadSourcesRequested } from './store/sources/actions';
+import { loadSourcesRequested, loadSourcesSucceeded } from './store/sources/actions';
 import * as serviceWorker from './serviceWorker';
-import { db } from './utils/api';
+import * as Api from './utils/api';
 import { ApplicationState } from './store';
+import { loginSucceeded } from './store/user/actions';
 
 const initialState: ApplicationState = {
-  // isAuthorized: false,
-  // users: { byId: {} },
+  user: {
+    authError: null,
+    isAuthorized: false,
+    email: 'Guest',
+  },
   sources: {
     byId: {},
     selectedSourceId: null,
@@ -51,8 +55,12 @@ ReactDOM.render(
 );
 
 (async () => {
-  await db.init();
+  await Api.db.init();
   store.dispatch<any>(loadSourcesRequested());
+
+  if (Api.isToken()) {
+    store.dispatch(loginSucceeded('test'));
+  }
 })();
 
 // If you want your app to work offline and load faster, you can change

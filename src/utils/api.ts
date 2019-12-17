@@ -5,7 +5,7 @@ const Parser = require('rss-parser');
 
 export interface User {
   id: number;
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -77,9 +77,33 @@ async function getFeed(feedUrl: any) {
   return null;
 }
 
+async function authorize(email: string, password: string): Promise<string> {
+  if (email === 'kekkeks' && password === 'kukeses') {
+    return '5555';
+  }
+
+  throw new Error('Incorrect login or password!')
+}
+
+const setToken = (token: string) => {
+  localStorage.setItem('token', token);
+}
+
+const clearToken = () => {
+  localStorage.removeItem('token');
+}
+
+const isToken = () => {
+  return !!localStorage.getItem('token');
+}
+
 const db = new DBService();
 
 export {
   getFeed,
-  db
+  authorize,
+  db,
+  setToken,
+  clearToken,
+  isToken,
 };
