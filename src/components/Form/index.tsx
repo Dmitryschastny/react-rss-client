@@ -29,13 +29,26 @@ const Form: React.FC<Props> = ({
   const formik = useFormik({
     initialValues: values,
     onSubmit,
+    // validateOnChange: true,
+    validate: (values: { [key: string]: string }) => {
+      const errors: { [key: string]: string } = {};
+
+      Object.keys(values).some(key => {
+        if (values[key].length < 6) {
+          errors[key] = 'Must be at least 6 chagarters!';
+        }
+      });
+
+      console.log(errors);
+
+      return errors;
+    }
   });
 
   return (
     <div className={styles.container}>
       <form
         className={styles.form}
-        onSubmit={formik.handleSubmit}
       >
         <Typography variant="h3" component="h3">{title}</Typography>
         {Object.keys(values).map((key) => (
@@ -45,12 +58,15 @@ const Form: React.FC<Props> = ({
             name={key}
             type={types && types[key] ? types[key] : 'text'}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values[key]}
             label={labels && labels[key] ? labels[key] : key}
+            error={!!formik.errors[key] && formik.touched[key]}
+            helperText={formik.touched[key] && formik.errors[key] || ''}
           />
         ))}
         <Button
-          onClick={() => { }}
+          onClick={() => { formik.handleSubmit() }}
           color="primary"
           variant="contained"
           className={`${styles.submitButton} ${styles.formItem}`}
